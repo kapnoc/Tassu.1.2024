@@ -1,7 +1,8 @@
 %10MB
 
-\documentclass[10pt,finnish,a5paper,twoside=semi]{scrartcl}
+\documentclass[10pt,finnish,a5paper]{scrartcl}
 
+\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=2cm]{geometry}
 \usepackage{fontspec}
 \usepackage{babel}
 \usepackage{microtype}
@@ -12,7 +13,6 @@
 \usepackage{graphicx}
 \usepackage{wallpaper}
 \usepackage{lipsum}
-\usepackage{tcolorbox}
 \usepackage[labelformat=empty]{caption}
 \usepackage[export]{adjustbox}
 \usepackage{calc}
@@ -20,22 +20,24 @@
 \usepackage{contour}
 \contourlength{2pt}
 
-\definecolor{link}{HTML}{05A8F7}
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
 
-\usepackage[colorlinks,linkcolor=black,urlcolor=link]{hyperref}
+\definecolor{link}{HTML}{f7941e}
 
 \RedeclareSectionCommands[tocraggedentrytext]{section}
 
 \setlength{\RaggedRightParindent}{\parindent}
 \RaggedRight
-\setmainfont[Ligatures=TeX]{Arial}
-\urlstyle{same}
+\setmainfont[Ligatures=TeX]{Ubuntu}
+\newfontfamily\monofont{Ubuntu Mono}
 \definecolor{kuru}{HTML}{f7941e}
 \setcounter{secnumdepth}{0}
 \setcounter{tocdepth}{2}
-\addto\captionsfinnish{\renewcommand{\contentsname}{Tässä numerossa:}}
+\addto\captionsfinnish{\renewcommand{\contentsname}{Tässä numerossa}}
 \addtokomafont{sectionentry}{\normalfont}
-\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{disposition}{\rmfamily\color{kuru}}
 \addtokomafont{caption}{\footnotesize}
 \setkomafont{subsection}{\normalfont\itshape}
 \setenumerate{leftmargin=*}
@@ -43,8 +45,69 @@
 \frenchspacing
 \def\UrlBreaks{\do\/\do-}
 
+\usepackage[automark, autooneside=false]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\setkomafont{pageheadfoot}{}% not special font for page head and foot
+% \clearpairofpagestyles
+% \ihead{\leftmark}
+% \ohead{\Ifstr{\leftmark}{\rightbotmark}{}{\rightbotmark}}
+% \ohead{\Ifstr{\rightbotmark}{\leftmark}{}{\leftmark}}
+\ihead{}
+\chead{}
+\ohead{\color{kuru}\rightmark}
+% \ihead{\headmark}
+% \markright{
+% }
+\cfoot{\pagemark}
+
+% Packages needed:
+\usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{kuruboxtitle}[1][]{%
+    enhanced,
+    before skip=0mm,after skip=0mm, 
+    width=1\textwidth, boxrule=0mm,
+    colback=kuru, colframe=kuru, % Colors
+    sharp corners,
+    underlay={%
+	    \fill[kuru] ([xshift=-10mm,yshift=2mm]frame.north west) -- ([xshift=8mm]frame.north east)
+	    -- ([xshift=10mm,yshift=-2mm]frame.south east) -- ([xshift=-8mm]frame.south west)
+	    -- cycle;
+	    \fill[white] ([xshift=-6mm,yshift=-2mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-3mm,yshift=-2mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-4.5mm,yshift=-6mm]frame.north west) circle (1mm);
+	    \fill[white] ([xshift=-4.5mm,yshift=-9mm]frame.north west) circle (1mm);
+        },
+    % drop fuzzy shadow, % Shadow
+    title={#1},
+}
+
+\usepackage{titlesec}
+\titleformat
+{\section} % command
+[display] % shape
+{\bfseries\Large} % format
+{\thechapter} % label
+{0.5ex} % sep
+{
+	\clearpage
+	\thispagestyle{plain}
+	\begin{center}
+		\begin{kuruboxtitle}[]
+			\color{white}
+} % before-code
+[
+		\end{kuruboxtitle}
+	\end{center}
+] % after-code
+
+\usepackage[colorlinks,linkcolor=black,urlcolor=link]{hyperref}
+\renewcommand{\theHsection}{\thepart.section.\thesection}
+\urlstyle{same}
+
 \begin{document}
 \thispagestyle{empty}
+\newgeometry{left=1cm}
 
 \ThisCenterWallPaper{1.10}{assets/no_auto_compression/kansikuva}
 
@@ -53,10 +116,34 @@
 {\noindent\color{kuru}\begin{tabular}{@{}c@{}}
 \includegraphics[width=6cm]{assets/no_auto_compression/logo} \\
 \\
-\contour{white}{\large\bfseries 1/2024 Kurkisuon Rusakot ry}
+
+\newtcolorbox{kuruboxfrontpage}[1][]{%
+    enhanced,
+    before skip=0mm,after skip=0mm, 
+    width=0.6\textwidth, boxrule=0mm,
+    colback=kuru, colframe=kuru, % Colors
+    sharp corners,
+    underlay={%
+	    \fill[kuru] ([xshift=-8mm,yshift=3mm]frame.north west) -- ([yshift=1mm]frame.north east)
+	    -- ([xshift=1mm,yshift=-3mm]frame.south east) -- ([xshift=-7mm,yshift=-1mm]frame.south west)
+	    -- cycle;
+	    \fill[white] ([xshift=-4mm,yshift=-1mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-1mm,yshift=-1mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-2.5mm,yshift=-5mm]frame.north west) circle (1mm);
+	    \fill[white] ([xshift=-2.5mm,yshift=-8mm]frame.north west) circle (1mm);
+        },
+    % drop fuzzy shadow, % Shadow
+    title={#1},
+}
+\begin{kuruboxfrontpage}[]
+	\color{white}{\large\bfseries 1/2024 Kurkisuon Rusakot ry}
+\end{kuruboxfrontpage}
+% \contour{white}{\large\bfseries 1/2024 Kurkisuon Rusakot ry}
 \end{tabular}\par}
 
 \clearpage
+\restoregeometry
+\thispagestyle{plain}
 
 \ThisULCornerWallPaper{1}{assets/no_auto_compression/sisäkansikuva.jpg}
 
@@ -97,10 +184,10 @@ Tuntematon kolkka
 % \columnbreak
 \vspace{0.64cm}
 
-\clearpage\tableofcontents
+\tableofcontents
 % \end{multicols}
 
-\clearpage\section{Lippukunnanjohtajan tervehdys}
+\section{Lippukunnanjohtajan tervehdys KESKEN}
 
 %\medskip
 
@@ -125,191 +212,27 @@ Tuntematon kolkka
 \medskip
 \noindent\null\hfill Kuva: Tanguy Gérôme
 
-\clearpage\section{Tassu ennen vanhaan}
-\textit{Tassu on ilmestynyt säännöllisen epäsäännöllisesti lippukunnan perustamisvuodesta 1986
-lähtien. Tällä palstalla muistellaan menneitä ja julkaistaan valittuja paloja takavuosien
-lehdistä.}
-
-\textit{Päätoimittaja sai paketin, jossa on vuosikymmeniä Tassun painoksia ja
-yrittää digitalisoida ne lähiaikoina!}
 
 
-% \clearpage\section{Lippukunnan syksy 2023 nopeasti}
-% 	\subsection{ROK}
-% 	\subsection{Operaatio olio -telttaretki 6.-8.10.}
-% 	\subsection{Hiipivä Haamu 5.11.}
-% 	\subsection{Samoajien retki ÄmÄm:n kanssa 10.-12.11.}
-% 	\subsection{Pikkujouluretki \& joulujuhla 15.-17.12.}
+% \section{Muistoja vuodelta 2023: Johtajien kansallispuistokierros Ruotsissa}
 
-\clearpage\section{Muistoja vuodelta 2023}
-        \subsection{Johtajien kansallispuistokierros Ruotsissa}
-
-
-\clearpage\section{Lippukunnan kevät 2024}
-
-	\subsection{Lippukunnan yhteinen laskiaistiistai 13.2.}
-
-\begin{multicols}{2}
-
-	\vspace*{0.16cm}
-	\noindent\includegraphics[width=\linewidth]{assets/laskiaistiistai2}
-
-	\small Laskiaistiistai vietimme Kontulan \mbox{kelkkapuistossa}, jossa kaikki
-	ryhmät kokoontuivat ja nauttivat kovaa lunta, joka sopi hyviin kelkkailuun, mutta ei niin
-	lumienkeleiden tekemiseen \ldots
-
-	\vspace*{1.28cm}
-	\noindent\includegraphics[width=\linewidth]{assets/laskiaistiistai1}
-
-	\ldots ja lämmintä mehua ja keksejä!
-	\columnbreak
-
-	\vspace*{1.28cm}
-	\noindent\includegraphics[width=\linewidth]{assets/laskiaistiistai4}
-
-	\ldots todella tuuliset ja talviset kelit \ldots
-
-	\vfill
-	\medskip
-	\noindent\null\hfill Tanguy Gérôme
-
-\end{multicols}
-
+\include{chapters/tassuennenvahnaan.tex}
+\include{chapters/laskiaistiistai.tex}
 \include{chapters/nahkalilja.tex}
 \include{chapters/kolkkienpäiväretki.tex}
 \include{chapters/olionpaluu.tex}
+\include{chapters/paraati.tex}
+\include{chapters/pyörävaellus.tex}
+% \section{Kevätretki \& kevätjuhla 24.-26.5.}
+\include{chapters/venevartionomaretki.tex}
+% \section{Uikun uinti -vaellus 26.–30.6. KESKEN}
+\include{chapters/kimara.tex}
+% \include{chapters/kolkkienpäiväretkisyksy.tex}
+\include{chapters/Kuvakilpailu.tex}
 
 
-\clearpage
-\subsection{Partioparaati 28.4.}
-
-\vspace*{-0.32cm}
-\begin{multicols}{2}
-
-	\begin{center}
-		\noindent\includegraphics[width=0.9\linewidth]{assets/paraati1}
-	\end{center}
-
-	\vspace*{-0.32cm}
-	\small KuRu:n paraatiosasto harjoiteli \mbox{paraati}protokollan
-	viikkokokouksessa, vielä talvella säällä \ldots
-
-	\begin{center}
-		\noindent\includegraphics[width=0.9\linewidth]{assets/paraati4}
-	\end{center}
-
-	\vspace*{-0.32cm}
-	\small Senaatintorilla löytyi yli kaksi tuhatta partiolaista Helsingistä, Espoosta, Vantaasta ja Kauniaisesta. Siellä marsittiin, nautitiin musiikista ja ajoittain auringosta.
-
-	Paraatin päätteeksi, KuRu:n osasto sai vielä maistuva lounas läheisessä \mbox{pitseriassa}!
-
-	\columnbreak
-
-	\begin{center}
-		\noindent\includegraphics[width=0.9\linewidth]{assets/paraati2}
-	\end{center}
-
-	\vspace*{-0.32cm}
-	\ldots ja pari päivää myöhemmin, kokoontui keväisessä kelissä ja matkusti kohti keskustan.
-
-	\begin{center}
-		\noindent\includegraphics[width=0.9\linewidth]{assets/paraati3}
-	\end{center}
-	% \vspace*{-2.00cm}
-
-
-\end{multicols}
-
-
-\medskip
-\noindent\null\hfill Tanguy Gérôme
-
-
-% \clearpage
-% \subsection{Veneen oma retki 3.–5.5.}
-
-\clearpage
-\subsection{Pyörävaellus 9.–12.5. KESKEN}
-
-\begin{multicols}{2}
-
-
-	\begin{center}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus1}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus3}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus4}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus5}
-	\end{center}
-
-	\columnbreak
-
-	% \small
-	Kolme rusakkoa lähtivät pyöräilemään KuRu:n varastolta torstaina
-	9.5. aamuna, lännen kohti. Matka alkoi pilvisessä ja viileässä säässä,
-	mutta kuten rusakot toivoivat sade jäi pois, ja aurinko saapui pian.
-
-	Ensimmäinen tekninen vika ilmestyi jo 600 metrin jälkeen, ja nopeasti
-	korjaantui. Rusakot pyöräilivat Kehä 1:n kautta Espooseen, ja
-	ensimmäisen evästauon pidettiin Leppävaarassa. Matka jatkui Turuntien
-	kautta, Kauniaisen ohi, Bemböleen. Vielä oli liian aikaisin syömään
-	lounas, eli matka jatkui Klauklahteen, jossa valittiin urheilukenttä
-	lounaspaikaksi.
-
-	Lounaan jälkeen jatkui matka \mbox{Kirkkonummen} kautta, ja päätimme yöpyä
-	meren äärellä, vaikka matka pitenisikin sen vuoksi.
-	Ensimmäisen jäätelön syötiin Pickalan huoltoasemalla.
-
-	Jäätelon jälkeen, pieni mutta stressaava Inkoon Rannikkotien pätkä
-	odotti meitä, jota seurasi rennompi mutta kuoppainen hiekkatie, ja
-	vihdoin löytyi meidän yöpymispaikka: Kopparnäs, Inkoo
-
-	74km jälkeen jotkut rusakoista alkoivat tuntea \textbf{vähän} kipua ja
-	\textbf{vähän} väsymystä. Äänekkäät kalatiirat rannalla uhkasivat olla
-	antamatta meidän nukkua, mutta onneksi lähtivät illallisen jälkeen.
-
-	\columnbreak
-
-	Sade saapui yöllä, ja kiltisti lähti ennen rusakoiden herätys.
-
-	\columnbreak
-
-	\begin{center}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus6}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus7}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus8}
-		\noindent\includegraphics[width=0.94\linewidth]{assets/pyörävaellus9}
-	\end{center}
-
-	\columnbreak
-
-	\begin{center}
-		\noindent\includegraphics[width=1.05\linewidth]{assets/pyörävaellus10}
-		\noindent\includegraphics[width=1.05\linewidth]{assets/pyörävaellus13}
-	\end{center}
-	\columnbreak
-	\begin{center}
-		\noindent\includegraphics[width=1.05\linewidth]{assets/pyörävaellus11}
-		\noindent\includegraphics[width=1.05\linewidth]{assets/pyörävaellus15}
-	\end{center}
-
-	\columnbreak
-
-	\medskip
-	\noindent\null\hfill Tanguy Gérôme
-
-\end{multicols}
-
-\clearpage
-\subsection{Kevätretki \& kevätjuhla 24.-26.5.}
-
-\clearpage\section{Kuvakilpailu}
-
-Tassun toimittajat toivovat julkaisevansa toisen painoksen vuoden lopussa, ja
-järjestävät näiden painosten välissä kuvakilpailun!
-
-\clearpage\section{Tulossa pian}
-\subsection{Uikun uinti -vaellus 26.–30.6.}
-\subsection{Kimara 26.7.-3.8.}
+% \clearpage\section{Tulossa pian}
+% \subsection{Kimara 26.7.-3.8.}
 
 
 
@@ -319,12 +242,34 @@ järjestävät näiden painosten välissä kuvakilpailun!
 
 \vfill
 
+\newtcolorbox{kuruboxendpage}[1][]{%
+    enhanced,
+    before skip=0mm,after skip=0mm, 
+    width=0.68\textwidth, boxrule=0mm,
+    colback=kuru, colframe=kuru, % Colors
+    sharp corners,
+    underlay={%
+	    \fill[kuru] ([xshift=-8mm,yshift=3mm]frame.north west) -- ([yshift=1mm]frame.north east)
+	    -- ([xshift=1mm,yshift=-3mm]frame.south east) -- ([xshift=-7mm,yshift=-1mm]frame.south west)
+	    -- cycle;
+	    \fill[white] ([xshift=-4mm,yshift=-1mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-1mm,yshift=-1mm]frame.north west) ellipse (1mm and 2mm);
+	    \fill[white] ([xshift=-2.5mm,yshift=-5mm]frame.north west) circle (1mm);
+	    \fill[white] ([xshift=-2.5mm,yshift=-8mm]frame.north west) circle (1mm);
+        },
+    % drop fuzzy shadow, % Shadow
+    title={#1},
+}
 
 {
 	\noindent
-	\begin{center}
-		\contour{white}{\Large\bfseries \color{black}1/2024 Kurkisuon Rusakot ry}
-	\end{center}
+	\begin{addmargin}[0.32cm]{0cm}
+		\begin{center}
+			\begin{kuruboxendpage}[]
+				\color{white}{\Large\bfseries 1/2024 Kurkisuon Rusakot ry}
+			\end{kuruboxendpage}
+		\end{center}
+	\end{addmargin}
 	% \psset{cornersize=absolute,linearc=2.5\baselineskip}
 	% \begin{center}
 	% 	\psframebox[framesep=3mm,fillcolor=white,fillstyle=solid,linestyle=none]{
